@@ -1,5 +1,6 @@
 package com.laurentiuspilca.ssia.config;
 
+import com.laurentiuspilca.ssia.Sha512PasswordEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -25,6 +26,6 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     PasswordEncoder getPasswordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new Sha512PasswordEncoder();
     }
 }
