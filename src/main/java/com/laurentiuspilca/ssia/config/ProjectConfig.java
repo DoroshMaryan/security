@@ -40,6 +40,6 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public InitializingBean initializingBean() {
-        return () -> SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
+        return () -> SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_THREADLOCAL);
     }
 }
