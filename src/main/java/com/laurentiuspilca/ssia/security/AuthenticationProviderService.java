@@ -1,17 +1,15 @@
 package com.laurentiuspilca.ssia.security;
 
 import com.laurentiuspilca.ssia.details.CustomUserDetails;
-import com.laurentiuspilca.ssia.entities.enums.EncryptionAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -23,20 +21,13 @@ public class AuthenticationProviderService implements AuthenticationProvider {
     private JpaUserDetailsService userDetailsService;
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    private SCryptPasswordEncoder sCryptPasswordEncoder;
-
-
+    @Qualifier("idToPasswordEncoder")
+    private Map<String, PasswordEncoder> idToPasswordEncoder;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         final String userName = authentication.getName();
         final String password = authentication.getCredentials().toString();
-
-        Map<String, PasswordEncoder> idToPasswordEncoder = Map.of(EncryptionAlgorithm.BCRYPT.name(), bCryptPasswordEncoder,
-                EncryptionAlgorithm.SCRYPT.name(), sCryptPasswordEncoder);
 
         System.out.println("CustomAuthenticationProvider.authenticate");
 
