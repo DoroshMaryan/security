@@ -1,4 +1,4 @@
-package com.laurentiuspilca.ssia.security;
+package com.laurentiuspilca.ssia.details;
 
 import com.laurentiuspilca.ssia.details.CustomUserDetails;
 import com.laurentiuspilca.ssia.entities.User;
