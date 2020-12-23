@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.sql.DataSource;
 
@@ -23,6 +25,12 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AuthenticationProvider authenticationProvider;
+
+    @Autowired
+    private AuthenticationSuccessHandler successHandler;
+
+    @Autowired
+    private AuthenticationFailureHandler failureHandler;
 
     @Bean
     public UserDetailsService userDetailsService(DataSource dataSource) {
@@ -41,10 +49,13 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic(c -> {
-            c.realmName("OTHER");
-            c.authenticationEntryPoint(new CustomEntryPoint());
-        });
+        http.formLogin()
+                .defaultSuccessUrl("/callable", true)
+                .successHandler(successHandler)
+                .failureHandler(failureHandler)
+        .and()
+        .httpBasic();
+
         http.authorizeRequests().anyRequest().authenticated();
     }
 
