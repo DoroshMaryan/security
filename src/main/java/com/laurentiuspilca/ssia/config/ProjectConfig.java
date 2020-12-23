@@ -10,14 +10,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-
-import javax.sql.DataSource;
 
 @Configuration
 @EnableAsync
@@ -33,13 +29,13 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
     private AuthenticationFailureHandler failureHandler;
 
     @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource) {
-        return new JdbcUserDetailsManager(dataSource);
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+    public SCryptPasswordEncoder sCryptPasswordEncoder() {
+        return new SCryptPasswordEncoder();
     }
 
     @Override
@@ -50,11 +46,7 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
-                .defaultSuccessUrl("/callable", true)
-                .successHandler(successHandler)
-                .failureHandler(failureHandler)
-        .and()
-        .httpBasic();
+                .defaultSuccessUrl("/main", true);
 
         http.authorizeRequests().anyRequest().authenticated();
     }

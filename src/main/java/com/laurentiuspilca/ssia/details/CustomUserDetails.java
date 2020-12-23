@@ -1,36 +1,37 @@
-package com.laurentiuspilca.ssia.models;
+package com.laurentiuspilca.ssia.details;
 
+import com.laurentiuspilca.ssia.entities.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class User implements UserDetails {
+public class CustomUserDetails implements UserDetails {
 
-    private final String userName;
-    private final String password;
-    private final String authoryty;
+    private final User user;
 
-    public User(String userName, String password, String authoryty) {
-        this.userName = userName;
-        this.password = password;
-        this.authoryty = authoryty;
+    public CustomUserDetails(User user) {
+        this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(()->authoryty);
+        return user.getAuthorities().stream()
+                .map(a -> new SimpleGrantedAuthority(a.getName()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return userName;
+        return user.getUsername();
     }
 
     @Override
@@ -51,5 +52,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public User getUser() {
+        return user;
     }
 }
