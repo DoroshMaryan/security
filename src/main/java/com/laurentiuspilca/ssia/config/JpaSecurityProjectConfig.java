@@ -1,6 +1,8 @@
 package com.laurentiuspilca.ssia.config;
 
+import com.laurentiuspilca.ssia.details.JpaUserDetailsService;
 import com.laurentiuspilca.ssia.entities.enums.EncryptionAlgorithm;
+import com.laurentiuspilca.ssia.security.JpaAuthenticationProvider;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,8 +28,14 @@ import java.util.Map;
 @Profile("jpa")
 public class JpaSecurityProjectConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private AuthenticationProvider authenticationProvider;
+    @Bean
+    public JpaUserDetailsService jpaUserDetailsService(){
+        return new JpaUserDetailsService();
+    }
+    @Bean
+    public AuthenticationProvider authenticationProvider(){
+        return new JpaAuthenticationProvider(jpaUserDetailsService());
+    }
 
     @Autowired
     private AuthenticationSuccessHandler successHandler;
@@ -54,7 +62,7 @@ public class JpaSecurityProjectConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authenticationProvider);
+        auth.authenticationProvider(authenticationProvider());
     }
 
     @Override

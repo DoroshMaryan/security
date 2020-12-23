@@ -4,25 +4,23 @@ import com.laurentiuspilca.ssia.details.CustomUserDetails;
 import com.laurentiuspilca.ssia.details.JpaUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@Component
-@Profile("jpa")
 public class JpaAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
     private JpaUserDetailsService userDetailsService;
+
+    public JpaAuthenticationProvider(JpaUserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Autowired
     @Qualifier("idToPasswordEncoder")

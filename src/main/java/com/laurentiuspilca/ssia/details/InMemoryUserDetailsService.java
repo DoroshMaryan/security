@@ -1,4 +1,4 @@
-package com.laurentiuspilca.ssia.services;
+package com.laurentiuspilca.ssia.details;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
