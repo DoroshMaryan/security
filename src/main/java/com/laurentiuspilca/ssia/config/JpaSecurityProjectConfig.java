@@ -3,6 +3,8 @@ package com.laurentiuspilca.ssia.config;
 import com.laurentiuspilca.ssia.details.JpaUserDetailsService;
 import com.laurentiuspilca.ssia.entities.enums.EncryptionAlgorithm;
 import com.laurentiuspilca.ssia.security.JpaAuthenticationProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,12 +30,15 @@ import java.util.Map;
 @Profile("jpa")
 public class JpaSecurityProjectConfig extends WebSecurityConfigurerAdapter {
 
+    private final Logger LOG = LoggerFactory.getLogger(JpaSecurityProjectConfig.class);
+
     @Bean
-    public JpaUserDetailsService jpaUserDetailsService(){
+    public JpaUserDetailsService jpaUserDetailsService() {
         return new JpaUserDetailsService();
     }
+
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
         return new JpaAuthenticationProvider(jpaUserDetailsService());
     }
 
@@ -67,7 +72,7 @@ public class JpaSecurityProjectConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        System.out.println("gggggggg");
+        LOG.info("Configure type authentication: {}", "formLogin");
         http.formLogin()
                 .defaultSuccessUrl("/main", true);
 

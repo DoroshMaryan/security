@@ -1,16 +1,24 @@
 package com.laurentiuspilca.ssia.controllers;
 
-import org.apache.tomcat.util.http.parser.Authorization;
-import org.springframework.security.core.Authentication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
+    private final static Logger LOG = LoggerFactory.getLogger(HomeController.class);
+
     @GetMapping({"/home", "/"})
     public String home() {
         return "home.html";
+    }
+
+    @GetMapping({"/home-error"})
+    public String homeError() {
+        throw new RuntimeException("Error happens in homeError ");
+//       return "home.html";
     }
 
     @GetMapping("/error")
@@ -21,5 +29,11 @@ public class HomeController {
     @GetMapping("/page")
     public String page() {
         return "home.html";
+    }
+
+    @ExceptionHandler(Exception.class)
+    public String conflict(Exception e) {
+        LOG.error("Error from HomeController ExceptionHandler ", e);
+        return "error.html";
     }
 }

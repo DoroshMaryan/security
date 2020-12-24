@@ -1,6 +1,8 @@
 package com.laurentiuspilca.ssia.config;
 
 import com.laurentiuspilca.ssia.details.InMemoryUserDetailsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -16,6 +18,8 @@ import java.util.List;
 @Configuration
 @Profile("inMemory")
 public class InMemorySecurityProjectConfig extends WebSecurityConfigurerAdapter {
+
+    private final Logger LOG = LoggerFactory.getLogger(InMemorySecurityProjectConfig.class);
 
     @Override
     @Bean
@@ -40,9 +44,12 @@ public class InMemorySecurityProjectConfig extends WebSecurityConfigurerAdapter 
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        LOG.info("Configure type authentication: {}", "httpBasic");
         http.httpBasic();
 
-        http.authorizeRequests().anyRequest().hasAnyAuthority("WRITE", "READ");
+        http.authorizeRequests()
+                .anyRequest()
+                .permitAll();
 //        http.authorizeRequests().anyRequest().hasAuthority("WRITE");
 //        http.authorizeRequests().anyRequest().access("hasAuthority('WRITE')");
     }

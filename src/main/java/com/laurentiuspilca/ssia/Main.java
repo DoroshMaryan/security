@@ -10,8 +10,8 @@ public class Main {
 
     public static void main(String[] args) {
         ConfigurableEnvironment environment = new StandardEnvironment();
-        environment.setActiveProfiles("jpa");
-//        environment.setActiveProfiles("inMemory");
+//        environment.setActiveProfiles("jpa");
+        environment.setActiveProfiles("inMemory");
 
         SpringApplication sa = new SpringApplication(Main.class);
         sa.setEnvironment(environment);
