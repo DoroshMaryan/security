@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
@@ -31,7 +32,7 @@ public class InMemorySecurityProjectConfig extends WebSecurityConfigurerAdapter 
 
         var user2 = User.withUsername("jane")
                 .password("11111")
-                .authorities("WRITE")
+                .authorities("WRITE", "read", "delete")
                 .build();
 
         return new InMemoryUserDetailsService(List.of(user1, user2));
@@ -46,10 +47,10 @@ public class InMemorySecurityProjectConfig extends WebSecurityConfigurerAdapter 
     protected void configure(HttpSecurity http) throws Exception {
         LOG.info("Configure type authentication: {}", "httpBasic");
         http.httpBasic();
-
+        final String expression = "hasAuthority('READ') and !hasAuthority('delete')" ;
         http.authorizeRequests()
                 .anyRequest()
-                .permitAll();
+                .access(expression);
 //        http.authorizeRequests().anyRequest().hasAuthority("WRITE");
 //        http.authorizeRequests().anyRequest().access("hasAuthority('WRITE')");
     }
