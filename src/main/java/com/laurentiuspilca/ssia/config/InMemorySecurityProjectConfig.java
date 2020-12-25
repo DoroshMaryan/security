@@ -27,12 +27,12 @@ public class InMemorySecurityProjectConfig extends WebSecurityConfigurerAdapter 
     public UserDetailsService userDetailsService() {
         var user1 = User.withUsername("john")
                 .password("11111")
-                .authorities("READ")
+                .roles("ADMIN")
                 .build();
 
         var user2 = User.withUsername("jane")
                 .password("11111")
-                .authorities("WRITE", "read", "delete")
+                .authorities("ROLE_MANAGER")
                 .build();
 
         return new InMemoryUserDetailsService(List.of(user1, user2));
@@ -47,7 +47,7 @@ public class InMemorySecurityProjectConfig extends WebSecurityConfigurerAdapter 
     protected void configure(HttpSecurity http) throws Exception {
         LOG.info("Configure type authentication: {}", "httpBasic");
         http.httpBasic();
-        final String expression = "hasAuthority('READ') and !hasAuthority('delete')" ;
+        final String expression = "hasRole('ADMIN')" ;
         http.authorizeRequests()
                 .anyRequest()
                 .access(expression);
