@@ -79,4 +79,9 @@ public class HelloController {
             executorService.shutdown();
         }
     }
+
+    @GetMapping("/ciao")
+    public String ciao() {
+        return "Ciao!";
+    }
 }

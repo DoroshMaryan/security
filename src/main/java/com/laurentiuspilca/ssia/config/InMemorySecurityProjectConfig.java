@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
@@ -47,10 +46,13 @@ public class InMemorySecurityProjectConfig extends WebSecurityConfigurerAdapter 
     protected void configure(HttpSecurity http) throws Exception {
         LOG.info("Configure type authentication: {}", "httpBasic");
         http.httpBasic();
-        final String expression = "hasRole('ADMIN')" ;
+        final String expression = "hasRole('ADMIN')";
         http.authorizeRequests()
-                .anyRequest()
-                .access(expression);
+                .mvcMatchers("/hello").access(expression)
+                .mvcMatchers("/ciao").hasRole("MANAGER")
+                .anyRequest().authenticated();
+
+//        http.authorizeRequests().anyRequest().access(expression);
 //        http.authorizeRequests().anyRequest().hasAuthority("WRITE");
 //        http.authorizeRequests().anyRequest().access("hasAuthority('WRITE')");
     }
