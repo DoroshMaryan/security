@@ -1,6 +1,6 @@
 package com.laurentiuspilca.ssia.config;
 
-import com.laurentiuspilca.ssia.postprocessor.MessageBeanPostProcessor;
+import com.laurentiuspilca.ssia.filters.StaticKeyAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -11,9 +11,14 @@ public class ProjectConfig {
     public static final Logger LOGGER = LoggerFactory.getLogger(ProjectConfig.class);
 
     @Bean
-    String setString(){
+    String setString() {
         LOGGER.info("Start ProjectConfig bean");
         return "stringBean";
+    }
+
+    @Bean
+    public StaticKeyAuthenticationFilter staticKeyAuthenticationFilter() {
+        return new StaticKeyAuthenticationFilter();
     }
 //    @Bean
 //    public MessageBeanPostProcessor messageBeanPostProcessor(){

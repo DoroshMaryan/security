@@ -3,8 +3,10 @@ package com.laurentiuspilca.ssia.config;
 import com.laurentiuspilca.ssia.details.InMemoryUserDetailsService;
 import com.laurentiuspilca.ssia.filters.AuthenticationLoggingFilter;
 import com.laurentiuspilca.ssia.filters.RequestValidationFilter;
+import com.laurentiuspilca.ssia.filters.StaticKeyAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -24,6 +26,9 @@ import java.util.List;
 public class InMemorySecurityProjectConfig extends WebSecurityConfigurerAdapter {
 
     private final Logger LOG = LoggerFactory.getLogger(InMemorySecurityProjectConfig.class);
+
+    @Autowired
+    private StaticKeyAuthenticationFilter staticKeyAuthenticationFilter;
 
     @Override
     @Bean
@@ -49,10 +54,11 @@ public class InMemorySecurityProjectConfig extends WebSecurityConfigurerAdapter 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         LOG.info("Configure type authentication: {}", "httpBasic");
-        http.httpBasic();
+//        http.httpBasic();
         http.csrf().disable();
         http.addFilterBefore(new RequestValidationFilter(), BasicAuthenticationFilter.class)
-        .addFilterAfter(new AuthenticationLoggingFilter(), BasicAuthenticationFilter.class);
+                .addFilterAfter(new AuthenticationLoggingFilter(), BasicAuthenticationFilter.class)
+                .addFilterAt(staticKeyAuthenticationFilter, BasicAuthenticationFilter.class);
         final String expression = "hasRole('ADMIN')";
         http.authorizeRequests()
                 .antMatchers("/hello").access(expression)
