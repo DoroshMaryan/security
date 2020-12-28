@@ -27,8 +27,8 @@ public class InMemorySecurityProjectConfig extends WebSecurityConfigurerAdapter 
 
     private final Logger LOG = LoggerFactory.getLogger(InMemorySecurityProjectConfig.class);
 
-    @Autowired
-    private StaticKeyAuthenticationFilter staticKeyAuthenticationFilter;
+//    @Autowired
+//    private StaticKeyAuthenticationFilter staticKeyAuthenticationFilter;
 
     @Override
     @Bean
@@ -54,11 +54,11 @@ public class InMemorySecurityProjectConfig extends WebSecurityConfigurerAdapter 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         LOG.info("Configure type authentication: {}", "httpBasic");
-//        http.httpBasic();
+        http.httpBasic();
         http.csrf().disable();
         http.addFilterBefore(new RequestValidationFilter(), BasicAuthenticationFilter.class)
-                .addFilterAfter(new AuthenticationLoggingFilter(), BasicAuthenticationFilter.class)
-                .addFilterAt(staticKeyAuthenticationFilter, BasicAuthenticationFilter.class);
+                .addFilterAfter(new AuthenticationLoggingFilter(), BasicAuthenticationFilter.class);
+//                .addFilterAt(staticKeyAuthenticationFilter, BasicAuthenticationFilter.class);
         final String expression = "hasRole('ADMIN')";
         http.authorizeRequests()
                 .antMatchers("/hello").access(expression)

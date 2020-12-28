@@ -16,10 +16,10 @@ public class ProjectConfig {
         return "stringBean";
     }
 
-    @Bean
-    public StaticKeyAuthenticationFilter staticKeyAuthenticationFilter() {
-        return new StaticKeyAuthenticationFilter();
-    }
+//    @Bean
+//    public StaticKeyAuthenticationFilter staticKeyAuthenticationFilter() {
+//        return new StaticKeyAuthenticationFilter();
+//    }
 //    @Bean
 //    public MessageBeanPostProcessor messageBeanPostProcessor(){
 //        LOGGER.info("Start ProjectConfig bean");

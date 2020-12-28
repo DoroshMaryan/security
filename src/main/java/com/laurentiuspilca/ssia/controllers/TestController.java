@@ -17,8 +17,13 @@ public class TestController {
     }
 
     @GetMapping("/a/b")
-    public String getEndpointB() {
+    public String getEndpointA_B() {
         return "Works Get /a/b!";
+    }
+
+    @GetMapping("/a/d")
+    public String getEndpointA_D() {
+        return "Works Get /a/d!";
     }
 
     @GetMapping("/a/b/c")
