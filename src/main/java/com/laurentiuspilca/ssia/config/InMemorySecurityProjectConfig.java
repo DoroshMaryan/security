@@ -50,7 +50,7 @@ public class InMemorySecurityProjectConfig extends WebSecurityConfigurerAdapter 
         http.csrf().disable();
         final String expression = "hasRole('ADMIN')";
         http.authorizeRequests()
-                .mvcMatchers("/hello").access(expression)
+                .antMatchers("/hello").access(expression)
                 .mvcMatchers("/ciao").hasRole("MANAGER")
                 .mvcMatchers(HttpMethod.GET, "/a").authenticated()
                 .mvcMatchers(HttpMethod.POST, "/a").permitAll()
