@@ -1,6 +1,7 @@
 package com.laurentiuspilca.ssia.config;
 
 import com.laurentiuspilca.ssia.details.InMemoryUserDetailsService;
+import com.laurentiuspilca.ssia.filters.RequestValidationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.util.List;
 
@@ -48,6 +50,7 @@ public class InMemorySecurityProjectConfig extends WebSecurityConfigurerAdapter 
         LOG.info("Configure type authentication: {}", "httpBasic");
         http.httpBasic();
         http.csrf().disable();
+        http.addFilterBefore(new RequestValidationFilter(), BasicAuthenticationFilter.class);
         final String expression = "hasRole('ADMIN')";
         http.authorizeRequests()
                 .antMatchers("/hello").access(expression)
@@ -56,7 +59,7 @@ public class InMemorySecurityProjectConfig extends WebSecurityConfigurerAdapter 
                 .mvcMatchers(HttpMethod.GET, "/a").authenticated()
                 .mvcMatchers(HttpMethod.POST, "/a").permitAll()
                 .mvcMatchers("/a/b/**").authenticated()
-                .anyRequest().denyAll();
+                .anyRequest().permitAll();
 
 //        http.authorizeRequests().anyRequest().access(expression);
 //        http.authorizeRequests().anyRequest().hasAuthority("WRITE");
