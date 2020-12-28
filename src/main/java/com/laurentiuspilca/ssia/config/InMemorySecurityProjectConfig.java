@@ -51,11 +51,12 @@ public class InMemorySecurityProjectConfig extends WebSecurityConfigurerAdapter 
         final String expression = "hasRole('ADMIN')";
         http.authorizeRequests()
                 .antMatchers("/hello").access(expression)
+                .regexMatchers(".*/(us|uk|ca)+/(en|fr)").hasRole("MANAGER")
                 .mvcMatchers("/ciao").hasRole("MANAGER")
                 .mvcMatchers(HttpMethod.GET, "/a").authenticated()
                 .mvcMatchers(HttpMethod.POST, "/a").permitAll()
                 .mvcMatchers("/a/b/**").authenticated()
-                .anyRequest().permitAll();
+                .anyRequest().denyAll();
 
 //        http.authorizeRequests().anyRequest().access(expression);
 //        http.authorizeRequests().anyRequest().hasAuthority("WRITE");
