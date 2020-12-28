@@ -1,6 +1,7 @@
 package com.laurentiuspilca.ssia.config;
 
 import com.laurentiuspilca.ssia.details.InMemoryUserDetailsService;
+import com.laurentiuspilca.ssia.filters.AuthenticationLoggingFilter;
 import com.laurentiuspilca.ssia.filters.RequestValidationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,8 @@ public class InMemorySecurityProjectConfig extends WebSecurityConfigurerAdapter 
         LOG.info("Configure type authentication: {}", "httpBasic");
         http.httpBasic();
         http.csrf().disable();
-        http.addFilterBefore(new RequestValidationFilter(), BasicAuthenticationFilter.class);
+        http.addFilterBefore(new RequestValidationFilter(), BasicAuthenticationFilter.class)
+        .addFilterAfter(new AuthenticationLoggingFilter(), BasicAuthenticationFilter.class);
         final String expression = "hasRole('ADMIN')";
         http.authorizeRequests()
                 .antMatchers("/hello").access(expression)
