@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.Callable;
@@ -21,6 +22,11 @@ public class HelloController {
 //        SecurityContext context = SecurityContextHolder.getContext();
 //        return String.format("Hello %s!", context.getAuthentication().getName());
         return String.format("Hello %s!", a.getName());
+    }
+
+    @PostMapping("/hello")
+    public String postHello(final Authentication a) {
+        return String.format("Post hello %s!", a.getName());
     }
 
     @GetMapping("/bye")
