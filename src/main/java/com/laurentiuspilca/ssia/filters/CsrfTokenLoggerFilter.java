@@ -13,8 +13,8 @@ import javax.servlet.ServletResponse;
 import java.io.IOException;
 import java.util.Objects;
 
-public class CsrfTokenLogger implements Filter {
-    public static final Logger LOGGER = LoggerFactory.getLogger(CsrfTokenLogger.class);
+public class CsrfTokenLoggerFilter implements Filter {
+    public static final Logger LOGGER = LoggerFactory.getLogger(CsrfTokenLoggerFilter.class);
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
